@@ -54,9 +54,9 @@ const getAllProducts = async (req, res, next) => {
             res.status(400).send({
                 message: "Products not found in database"
             })
-        }else{
-            res.status(200).send(filteredResults);
+            return;
         }
+        res.status(200).send(filteredResults);
     }catch(e){
         res.status(500).send({
             Error : e.message
