@@ -32,9 +32,13 @@ const createReview = async (req,res)=>{
             rating : req.body.rating,
             reviewDesc : req.body.reviewDesc
         });
+
+        const reviews = await Review.find({productId : productId});
+
         res.status(200).send({
             message : "Thanks for giving feedback :)",
-            data : reviewCreation
+            data : reviewCreation,
+            reviews
         })
     } catch (error) {
         res.status(400).send({
@@ -84,14 +88,18 @@ const updateReview = async (req, res) =>{
     const rId = req.params.rid;
 
     try{
-        const review = await Review.findByIdAndUpdate(rId, req.body,{
+        const updatedreview = await Review.findByIdAndUpdate(rId, req.body,{
             new : true,
             runValidators : true,
             useFindAndModify : false
         });
+
+        const allreviews = await Review.find({productId : updatedreview.productId})
+
         res.status(200).send({
             message : 'Review updated successfully',
-            review
+            updatedreview,
+            allreviews
         })
     }catch(err){
         res.status(400).send({
